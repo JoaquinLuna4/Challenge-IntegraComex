@@ -1,0 +1,72 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userprefs
+*.config.user
+*.resharper
+*.ncrunch
+*.cs.user
+*.dbmdl
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+*.exe
+*.pdb
+*.dll
+*.pri
+*.sgen
+*.cache
+*.vsix
+*.vsext
+*.vslib
+*.tlog
+*.cpdb
+*.mdmp
+
+# Packages
+packages/
+*.nupkg
+*.snupkg
+*.appx
+*.msi
+*.msp
+*.mxi
+*.pkg
+
+# Rider
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/
+
+# Project files
+*.user
+*.log
+*.bak
+*.old
+*.obj
+*.suo
+*.db
+*.sdf
+
+# Entity Framework Core migrations
+Migrations/*.Designer.cs
+Migrations/*.cs
+Migrations/*.resx
+!Migrations/ChallengeIntegra.Migrations.csproj # If you create a separate migrations project
+!Migrations/ChallengeIntegra.Migrations.targets # If you create a separate migrations project
+
+# Node.js
+node_modules/
+
+# Docker
+*.dockerignore
+
+# Misc
+.DS_Store
+Thumbs.db
