@@ -1,24 +1,35 @@
 using ChallengeIntegra.Data;
+using ChallengeIntegra.Services;
 using Microsoft.EntityFrameworkCore;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Sumando servicios al contenedor.
 builder.Services.AddControllersWithViews();
 
-// Added DbContext configuration
+// Sumando la configuraci�n de la cadena de conexi�n
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+
+// Servicios
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+builder.Services.AddScoped<IClienteService, ClienteService>();
+
+builder.Services.AddHttpClient();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+// Configurando la HTTP request.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value requires HTTPS. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+   app.UseHsts();
 }
 
 app.UseHttpsRedirection();

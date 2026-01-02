@@ -1,0 +1,45 @@
+@model ChallengeIntegra.Models.Cliente
+
+@{
+    ViewData["Title"] = "Eliminar Cliente";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3 class="text-danger">¿Estás seguro de que deseas eliminar a este cliente?</h3>
+<div>
+    <h4>Cliente</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-3">
+            @Html.DisplayNameFor(model => model.CUIT)
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.CUIT)
+        </dd>
+        <dt class = "col-sm-3">
+            @Html.DisplayNameFor(model => model.RazonSocial)
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.RazonSocial)
+        </dd>
+        <dt class = "col-sm-3">
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+        <dd class = "col-sm-9">
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+    </dl>
+    
+    @*
+        Este formulario se encarga de enviar la petición de borrado.
+        - 'asp-action="Delete"' apunta a la acción 'DeleteConfirmed' (ya que la acción se renombra con [HttpPost, ActionName("Delete")] en el controlador).
+        - Usa el método POST por seguridad.
+    *@
+    <form asp-action="Delete">
+        @* Campo oculto para enviar el Id del cliente que se va a eliminar. *@
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

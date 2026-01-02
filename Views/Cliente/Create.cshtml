@@ -1,0 +1,107 @@
+@model ChallengeIntegra.Models.Cliente
+
+@{
+    ViewData["Title"] = "Crear Nuevo Cliente";
+}
+
+<h4>@ViewData["Title"]</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        @*
+            Este formulario envia los datos a la acción 'Create' del controlador cuando se envíe.
+            
+        *@
+        <form asp-action="Create">
+            @*
+                'ModelOnly' significa que solo mostrará errores a nivel de modelo, no errores específicos de cada campo.
+            *@
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="CUIT" class="control-label"></label>
+                @*
+                    Usamos un 'input-group' de Bootstrap para agrupar el campo de texto y el botón de validación
+                    en una sola línea, mejorando la interfaz de usuario.
+                *@
+                <div class="input-group">
+                    <input asp-for="CUIT" id="cuitInput" class="form-control" />
+                    <button class="btn btn-outline-secondary" type="button" id="validateCuitBtn">Validar</button>
+                </div>
+                <span asp-validation-for="CUIT" class="text-danger"></span>
+            </div>
+
+            @* Este div se usará para mostrar el estado de la búsqueda de la Razón Social (cargando, error, etc.) *@
+            <div id="razonSocialStatus" class="mb-2"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="RazonSocial" class="control-label"></label>
+                <input asp-for="RazonSocial" id="razonSocialInput" class="form-control" readonly="readonly" />
+                <span asp-validation-for="RazonSocial" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Telefono" class="control-label"></label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+                 | <a asp-action="Index" class="btn btn-secondary">Volver al Listado</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // El evento ahora se asocia al clic del nuevo botón 'validateCuitBtn'.
+            $('#validateCuitBtn').on('click', function () {
+                var cuit = $('#cuitInput').val();
+                var razonSocialInput = $('#razonSocialInput');
+                var statusDiv = $('#razonSocialStatus');
+
+                razonSocialInput.val('');
+                statusDiv.html('');
+
+                if (cuit.length === 11) {
+                    statusDiv.html('<span class="text-info">Buscando Razón Social...</span>');
+
+                    $.ajax({
+                        // URL corregida para apuntar a la API sin el hack de '.replace()'.
+                        url: '@Url.Action("GetNombrePorCuit", "ClienteApi")',
+                        type: 'GET',
+                        data: { cuit: cuit },
+                        
+                        // CORRECCIÓN: Se añadieron las llaves { } que faltaban.
+                        success: function (response) {
+                            razonSocialInput.val(response.name);
+                            statusDiv.html('');
+                        },
+                        error: function (xhr) {
+                            var errorMessage = "No se pudo contactar al servicio.";
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                errorMessage = xhr.responseJSON.message;
+                            }
+                            statusDiv.html('<span class="text-danger">' + errorMessage + '</span>');
+                        }
+                    });
+                } else {
+                    statusDiv.html('<span class="text-warning">El CUIT debe contener 11 dígitos.</span>');
+                }
+            });
+        });
+    </script>
+}

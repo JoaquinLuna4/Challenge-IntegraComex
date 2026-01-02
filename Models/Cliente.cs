@@ -1,14 +1,23 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc; // Necesario para el atributo [Remote]
 
 namespace ChallengeIntegra.Models
 {
     public class Cliente
     {
-        [Key]
+        // Le damos la propiedad de llave primaria y autoincrementable.
+        // También es el campo que se usará para la validación remota en el modo de edición.
         public int Id { get; set; }
 
+        // Asignamos las data anotations a las propiedades y algunas validaciones. 
         [Required(ErrorMessage = "El CUIT es obligatorio.")]
         [StringLength(11, MinimumLength = 11, ErrorMessage = "El CUIT debe tener 11 caracteres.")]
+
+
+        // --- VALIDACIÓN REMOTA ---
+        // Llama a la acción 'VerificarCuitUnico' en 'ClienteApiController'.
+        // Le pasa el valor de este campo (CUIT) y el valor del campo 'Id' (AdditionalFields).
+        [Remote(action: "VerificarCuitUnico", controller: "ClienteApi", AdditionalFields = nameof(Id))]
         public string CUIT { get; set; }
 
         [Display(Name = "Razón Social")]
