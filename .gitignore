@@ -70,3 +70,7 @@ node_modules/
 # Misc
 .DS_Store
 Thumbs.db
+
+# Excluir tipos de archivo específicos para evitar subir documentación indeseada
+*.pdf
+*.txt
