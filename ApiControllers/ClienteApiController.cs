@@ -30,7 +30,7 @@ namespace ChallengeIntegra.ApiControllers
                 if (cuitExists)
                 {
                     // Si existe, devolvemos un JSON con el mensaje de error.
-                    // El framework de validación lo interpretará como un error.
+                    // El framework de validación lo interpreta como un error.
                     return new JsonResult($"El CUIT '{cuit}' ya está registrado.");
                 }
             }

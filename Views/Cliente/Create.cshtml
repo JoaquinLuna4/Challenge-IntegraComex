@@ -8,30 +8,23 @@
 <hr />
 <div class="row">
     <div class="col-md-6">
-        @*
-            Este formulario envia los datos a la acción 'Create' del controlador cuando se envíe.
-            
-        *@
         <form asp-action="Create">
-            @*
-                'ModelOnly' significa que solo mostrará errores a nivel de modelo, no errores específicos de cada campo.
-            *@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
             <div class="form-group mb-3">
                 <label asp-for="CUIT" class="control-label"></label>
-                @*
-                    Usamos un 'input-group' de Bootstrap para agrupar el campo de texto y el botón de validación
-                    en una sola línea, mejorando la interfaz de usuario.
-                *@
                 <div class="input-group">
-                    <input asp-for="CUIT" id="cuitInput" class="form-control" />
+                    @*
+                        Se establece maxlength="13" para permitir pegar CUITS con guiones.
+                        El script se encargará de limpiar y validar la longitud final.
+                    *@
+                    <input asp-for="CUIT" id="cuitInput" class="form-control" inputmode="numeric" pattern="[0-9]*" maxlength="13" />
                     <button class="btn btn-outline-secondary" type="button" id="validateCuitBtn">Validar</button>
                 </div>
+                @* Este span mostrará el mensaje de error de validación unificado. *@
                 <span asp-validation-for="CUIT" class="text-danger"></span>
             </div>
 
-            @* Este div se usará para mostrar el estado de la búsqueda de la Razón Social (cargando, error, etc.) *@
             <div id="razonSocialStatus" class="mb-2"></div>
 
             <div class="form-group mb-3">
@@ -67,25 +60,71 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            // El evento ahora se asocia al clic del nuevo botón 'validateCuitBtn'.
+            
+            // --- INICIO DE LA CORRECCIÓN DE VALIDACIÓN ---
+            // Forzamos a que las reglas de minlength y maxlength de jQuery Validation
+            // usen el mismo mensaje que nuestra data annotation. Esto evita el doble mensaje.
+            if ($.validator && $.validator.unobtrusive) {
+                var validator = $('form').validate();
+                if (validator) {
+                    validator.settings.rules.CUIT.minlength = 11;
+                    validator.settings.rules.CUIT.maxlength = 11;
+                    validator.settings.messages.CUIT = {
+                        minlength: "El CUIT debe tener 11 caracteres.",
+                        maxlength: "El CUIT debe tener 11 caracteres.",
+                        rangelength: "El CUIT debe tener 11 caracteres." // Agregado para unificar el mensaje de longitud
+                    };
+                }
+            }
+            // --- FIN DE LA CORRECCIÓN DE VALIDACIÓN ---
+
+            function cleanCuit(cuitValue) {
+                return cuitValue.replace(/[^0-9]/g, ''); // Elimina cualquier caracter que no sea un número
+            }
+
+            // Eventos para el campo CUIT
+            $('#cuitInput').on('keypress', function (e) {
+               // Permitir solo dígitos (0-9)
+                if (e.which < 48 || e.which > 57) {
+                    e.preventDefault();
+                }
+            });
+
+            $('#cuitInput').on('paste', function (e) {
+                 // Esperar a que el pegado termine antes de limpiar el valor
+                setTimeout(() => {
+                    var cleanedValue = cleanCuit($(this).val());
+                    $(this).val(cleanedValue);
+                }, 0);
+            });
+
+            $('#cuitInput').on('blur', function () {
+                 // Limpiar el valor en blur, por si se escribió algo no numérico o se pegó sin guiones
+                var cleanedValue = cleanCuit($(this).val());
+                $(this).val(cleanedValue);
+                // Forzar la revalidación en el blur para que el mensaje de error aparezca/desaparezca
+                $(this).valid();
+            });
+
+             // El evento ahora se asocia al clic del nuevo botón 'validateCuitBtn'.
             $('#validateCuitBtn').on('click', function () {
-                var cuit = $('#cuitInput').val();
+                        var cuit = cleanCuit($('#cuitInput').val()); // Limpiamos el CUIT antes de usarlo
+                        $('#cuitInput').val(cuit); // Actualizamos el input con el valor limpio
+
                 var razonSocialInput = $('#razonSocialInput');
                 var statusDiv = $('#razonSocialStatus');
 
                 razonSocialInput.val('');
                 statusDiv.html('');
 
-                if (cuit.length === 11) {
+                // Forzamos la validación completa del campo CUIT antes de la llamada AJAX
+                if ($('#cuitInput').valid()) { 
                     statusDiv.html('<span class="text-info">Buscando Razón Social...</span>');
 
                     $.ajax({
-                        // URL corregida para apuntar a la API sin el hack de '.replace()'.
                         url: '@Url.Action("GetNombrePorCuit", "ClienteApi")',
                         type: 'GET',
                         data: { cuit: cuit },
-                        
-                        // CORRECCIÓN: Se añadieron las llaves { } que faltaban.
                         success: function (response) {
                             razonSocialInput.val(response.name);
                             statusDiv.html('');
@@ -98,8 +137,6 @@
                             statusDiv.html('<span class="text-danger">' + errorMessage + '</span>');
                         }
                     });
-                } else {
-                    statusDiv.html('<span class="text-warning">El CUIT debe contener 11 dígitos.</span>');
                 }
             });
         });
