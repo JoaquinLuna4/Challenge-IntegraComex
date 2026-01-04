@@ -16,6 +16,7 @@ Este proyecto es una aplicación web desarrollada en ASP.NET Core MVC como soluc
   - **Controladores MVC Limpios:** Controladores enfocados exclusivamente en la gestión de vistas.
 
 - **Validaciones Avanzadas:**
+  - **Manejo Inteligente de Entrada CUIT:** El campo CUIT ahora permite pegar valores con guiones, los limpia automáticamente a solo dígitos y restringe la escritura a caracteres numéricos, mejorando significativamente la experiencia de usuario.
   - **Validación Remota de CUIT Único:** El sistema verifica en tiempo real contra la base de datos si un CUIT ya existe, previniendo duplicados antes de enviar el formulario.
   - **Autocompletado de Razón Social:** Al validar un CUIT, una llamada AJAX a un servicio externo obtiene y autocompleta el campo de Razón Social.
   - **Mejora de UX:** Se utiliza un botón "Validar" explícito para una interacción más intuitiva del usuario.
