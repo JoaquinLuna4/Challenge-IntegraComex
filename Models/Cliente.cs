@@ -24,6 +24,8 @@ namespace ChallengeIntegra.Models
         public string RazonSocial { get; set; }
 
         [Required(ErrorMessage = "El teléfono es obligatorio.")]
+        [StringLength(20, ErrorMessage = "El teléfono no puede tener más de 20 caracteres.")]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "El teléfono solo puede contener números.")]
         public string Telefono { get; set; }
 
         [Required(ErrorMessage = "La dirección es obligatoria.")]

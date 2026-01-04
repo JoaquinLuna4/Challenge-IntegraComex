@@ -20,18 +20,18 @@ namespace ChallengeIntegra.ApiControllers
         }
 
         [AcceptVerbs("GET", "POST")] // Aceptar tanto GET como POST
-        public async Task<IActionResult> VerificarCuitUnico(string cuit, int? id)
+        public async Task<IActionResult> VerificarCuitUnico(string CUIT, int? Id)
         {
             // Si el CUIT está vacío, la validación [Required] del modelo se encargará de eso.
             // Solo actua si hay un valor para verificar
-            if (!string.IsNullOrWhiteSpace(cuit))
+            if (!string.IsNullOrWhiteSpace(CUIT))
             {
-                bool cuitExists = await _clienteService.CuitExists(cuit, id);
+                bool cuitExists = await _clienteService.CuitExists(CUIT, Id);
                 if (cuitExists)
                 {
                     // Si existe, devolvemos un JSON con el mensaje de error.
                     // El framework de validación lo interpreta como un error.
-                    return new JsonResult($"El CUIT '{cuit}' ya está registrado.");
+                    return new JsonResult($"El CUIT '{CUIT}' ya está registrado.");
                 }
             }
 
