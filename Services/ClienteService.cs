@@ -63,7 +63,7 @@ namespace ChallengeIntegra.Services
         }
 
         //Para validar duplicados de CUIT
-
+        // Modificamos el método para aceptar un ID actual opcional para el modo de edición
         public async Task<bool> CuitExists(string cuit, int? currentId = null)
         {
             var query = _context.Clientes.Where(c => c.CUIT == cuit);

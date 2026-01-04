@@ -40,7 +40,7 @@ El proyecto sigue una arquitectura de N-Capas para promover la separación de re
 
 ## Tecnologías Utilizadas
 
-- **Backend:** .NET 6, ASP.NET Core MVC, C#
+- **Backend:** .NET 8, ASP.NET Core MVC, C#
 - **ORM:** Entity Framework Core
 - **Base de Datos:** SQL Server (configurado a través de `appsettings.json`)
 - **Frontend:** HTML, CSS, JavaScript, Bootstrap 5, jQuery & jQuery Unobtrusive AJAX
@@ -49,7 +49,7 @@ El proyecto sigue una arquitectura de N-Capas para promover la separación de re
 
 ### Prerrequisitos
 
-- [.NET 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0) o superior.
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) o superior.
 - Un servidor de base de datos SQL Server (LocalDB, Express, etc.).
 
 ### 1. Configuración de la Base de Datos

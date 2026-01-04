@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers to take advantage of Docker caching
@@ -11,7 +11,7 @@ COPY . .
 RUN dotnet publish -c Release -o out
 
 # Stage 2: Create the final runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
 # Copy the published application from the build stage

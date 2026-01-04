@@ -7,6 +7,7 @@ namespace ChallengeIntegra.Models
     {
         // Le damos la propiedad de llave primaria y autoincrementable.
         // También es el campo que se usará para la validación remota en el modo de edición.
+        [Key]
         public int Id { get; set; }
 
         // Asignamos las data anotations a las propiedades y algunas validaciones. 
