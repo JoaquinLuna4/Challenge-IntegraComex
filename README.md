@@ -82,3 +82,36 @@ dotnet run
 ```
 
 La aplicación estará disponible en la URL que se indique en la terminal (generalmente `https://localhost:7xxx` o `http://localhost:5xxx`).
+
+## Cómo Ejecutar con Docker (Opcional)
+
+Puedes ejecutar la aplicación utilizando Docker para una experiencia de despliegue consistente y aislada.
+
+### Prerrequisitos
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado y en ejecución.
+
+### Pasos
+1.  **Asegúrate de que la base de datos esté accesible:**
+    *   Si tu SQL Server está configurado como `(localdb)\mssqllocaldb` (el valor por defecto en el `appsettings.json`), es posible que necesites ajustar la `ConnectionString` para que Docker pueda conectarse a ella. Una opción es usar un SQL Server corriendo en un contenedor de Docker o una instancia de SQL Server remota/local accesible desde la red.
+
+2.  **Construir la imagen de Docker:**
+    *   Abre una terminal en la raíz del proyecto (donde se encuentra el `Dockerfile`).
+    *   Ejecuta el siguiente comando para construir la imagen. Esto puede tardar unos minutos la primera vez.
+        ```bash
+        docker build -t challengeintegra .
+        ```
+        (El `.` al final es importante, indica el contexto de la construcción).
+
+3.  **Ejecutar el contenedor de Docker:**
+    *   Una vez que la imagen esté construida, puedes ejecutar la aplicación en un contenedor:
+        ```bash
+        docker run -p 8080:80 challengeintegra
+        ```
+        Esto mapeará el puerto 8080 de tu máquina local al puerto 80 del contenedor.
+
+4.  **Acceder a la aplicación:**
+    *   Abre tu navegador y navega a `http://localhost:8080`.
+
+**Nota:** Si encuentras problemas de conexión a la base de datos al ejecutar en Docker, verifica que tu cadena de conexión en `appsettings.json` sea accesible desde dentro del contenedor de Docker. Para SQL Server local, `(localdb)\mssqllocaldb` no suele ser accesible directamente desde un contenedor.
+
+
